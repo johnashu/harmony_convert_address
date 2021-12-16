@@ -1,13 +1,12 @@
 import uvicorn
 import urllib.parse, json
+import logging as log
 
 from core.convert import convert_one_to_hex
-import logging as log
+
 
 async def app(scope, receive, send):
     assert scope["type"] == "http"
-
-    # print(scope)
 
     params = dict(urllib.parse.parse_qs(scope["query_string"].decode()))
     one_address = params["address"][0]

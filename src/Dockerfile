@@ -20,11 +20,3 @@ RUN pip3 install pipenv gunicorn uvicorn[standard] requests eth-utils eth-hash[p
 
 # copy project
 COPY . /usr/src 
-
-# RUN mkdir -p /app
-# COPY startup.py /startup.py
-# RUN chmod u+x /startup.py
-# VOLUME /app
-# EXPOSE 8000
-# WORKDIR /app
-# CMD /startup.py
