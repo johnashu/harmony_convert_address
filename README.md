@@ -7,7 +7,9 @@ Service to convert One Addresses to ETH format
 On an OS with Docker installed.
 
 `docker-compose build`
+
 `docker-compose up`
+
 # Test program Locally
 
 Start the service
