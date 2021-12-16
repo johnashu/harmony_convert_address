@@ -1,7 +1,7 @@
 import uvicorn
 import urllib.parse, json
 
-from core import convert
+from app.core import convert
 import logging as log
 
 async def app(scope, receive, send):

@@ -1,4 +1,4 @@
-from core.bech32 import *
+from app.core.bech32 import *
 from eth_utils import *
 
 
