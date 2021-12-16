@@ -23,3 +23,15 @@ Set the url in `example_test.py`
 Run the test
 
 `python3 example_test.py`
+
+Example response:
+
+```json
+{
+    "status": "success", 
+    "message": "ONE Address one1cwsf0lrq0hzphqa79q8pwrn6pnzzhwej4tqen3 converted to 0xc3a097Fc607Dc41b83bE280E170e7A0cc42bBb32", 
+    "one_address": "one1cwsf0lrq0hzphqa79q8pwrn6pnzzhwej4tqen3", 
+    "eth_address": "0xc3a097Fc607Dc41b83bE280E170e7A0cc42bBb32"
+    }
+
+```
