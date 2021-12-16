@@ -2,7 +2,7 @@ FROM ubuntu:20.04
 ARG DEBIAN_FRONTEND=noninteractive
 
 # # set work directory
-WORKDIR /usr/src
+WORKDIR /usr/src/app
 
 # set environment variables..j.
 # Prevents Python from writing pyc files to disc (equivalent to python -B option)
@@ -15,7 +15,8 @@ RUN apt-get update && apt-get install -y \
     python3 \
     python3-pip \
     python3.9
-RUN pip3 install pipenv gunicorn uvicorn[standard] requests eth_utils
+    
+RUN pip3 install pipenv gunicorn uvicorn[standard] requests eth-utils eth-hash[pycryptodome]
 
 # copy project
 COPY . /usr/src 

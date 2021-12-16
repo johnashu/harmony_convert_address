@@ -1,7 +1,7 @@
 import uvicorn
 import urllib.parse, json
 
-from app.core import convert
+from core.convert import convert_one_to_hex
 import logging as log
 
 async def app(scope, receive, send):
@@ -11,7 +11,7 @@ async def app(scope, receive, send):
 
     params = dict(urllib.parse.parse_qs(scope["query_string"].decode()))
     one_address = params["address"][0]
-    eth_address = await convert.convert_one_to_hex(one_address)
+    eth_address = await convert_one_to_hex(one_address)
 
     msg = f"ONE Address {one_address} converted to {eth_address}"
     log.info(msg)
