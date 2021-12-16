@@ -1,7 +1,6 @@
 # ONE Address -> ETH Address
 
-Service to convert One Addresses to ETH format
-
+Base Service to convert One Addresses to ETH format and serve results via API POST request.
 # Run with Docker
 
 On an OS with Docker installed.
