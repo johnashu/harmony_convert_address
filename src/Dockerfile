@@ -4,7 +4,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 # # set work directory
 WORKDIR /usr/src
 
-# set environment variables...
+# set environment variables..j.
 # Prevents Python from writing pyc files to disc (equivalent to python -B option)
 ENV PYTHONDONTWRITEBYTECODE 1
 # PYTHONUNBUFFERED: Prevents Python from buffering stdout and stderr (equivalent to python -u option)
@@ -18,7 +18,7 @@ RUN apt-get update && apt-get install -y \
 RUN pip3 install pipenv gunicorn uvicorn[standard] requests eth_utils
 
 # copy project
-COPY . /usr/src
+COPY . /usr/src 
 
 # RUN mkdir -p /app
 # COPY startup.py /startup.py
