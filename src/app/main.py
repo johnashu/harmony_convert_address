@@ -4,7 +4,6 @@ import logging as log
 
 from core.convert import convert_one_to_hex
 
-
 async def app(scope, receive, send):
     assert scope["type"] == "http"
 
@@ -13,7 +12,6 @@ async def app(scope, receive, send):
     eth_address = await convert_one_to_hex(one_address)
 
     msg = f"ONE Address {one_address} converted to {eth_address}"
-    log.info(msg)
     body = json.dumps(
         {
             "status": "success",
