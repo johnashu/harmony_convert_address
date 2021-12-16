@@ -1,7 +1,7 @@
 
 services:
   container_name: convert
-  build: /app
+  build: .
   command: gunicorn -w 4 -k uvicorn.workers.UvicornWorker main:app --bind 0.0.0.0
   ports:
     - "8000:8000"

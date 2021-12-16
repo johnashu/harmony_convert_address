@@ -18,7 +18,7 @@ RUN apt-get update && apt-get install -y \
 RUN pip3 install pipenv gunicorn uvicorn[standard] requests eth_utils
 
 # copy project
-COPY . /usr/src/app/
+COPY /app/ /usr/src/app/
 
 # RUN mkdir -p /app
 # COPY startup.py /startup.py
