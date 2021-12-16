@@ -2,7 +2,7 @@ import uvicorn
 import urllib.parse, json
 
 from core import convert
-
+import logging as log
 
 async def app(scope, receive, send):
     assert scope["type"] == "http"
@@ -14,7 +14,7 @@ async def app(scope, receive, send):
     eth_address = await convert.convert_one_to_hex(one_address)
 
     msg = f"ONE Address {one_address} converted to {eth_address}"
-
+    log.info(msg)
     body = json.dumps(
         {
             "status": "success",
@@ -34,7 +34,6 @@ async def app(scope, receive, send):
         }
     )
     await send({"type": "http.response.body", "body": body})
-
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="127.0.0.1", port=5000, log_level="info", reload=True)
