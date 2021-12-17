@@ -47,7 +47,7 @@ async def send_400(send, msg):
 async def app(scope, receive, send):
     assert scope["type"] == "http"
     q = scope["query_string"]
-    # log.info(q)
+    # log.info(scope)
     if not q:
         empty_msg = "Empty Request"
         await send_400(send, empty_msg)

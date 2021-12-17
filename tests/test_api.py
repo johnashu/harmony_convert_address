@@ -1,5 +1,7 @@
 import requests
 
+import curlify
+
 # Simple test script - execute when the app is running
 url = "http://127.0.0.1:5000"
 
@@ -17,9 +19,10 @@ empty_request = {"addresses": []}
 
 
 def make_request(params: dict) -> list:
-    res = requests.post(url, params=params).json()
-    print(res)
-    return res
+    res = requests.post(url, params=params)
+    print(f"{res.json()}\n")
+    print(f"{curlify.to_curl(res.request)}\n")
+    return res.json()
 
 
 def base(params: list, expected: str, status: str = None) -> None:
@@ -49,6 +52,6 @@ if __name__ == "__main__":
 
     # manual check tests. - uncomment to run.
 
-    # test_happy_flow()
-    # test_error_responses()
-    # test_wrong_address()
+    test_happy_flow()
+    test_error_responses()
+    test_wrong_address()

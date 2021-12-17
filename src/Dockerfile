@@ -16,7 +16,7 @@ RUN apt-get update && apt-get install -y \
     python3-pip \
     python3.9
     
-RUN pip3 install pipenv gunicorn uvicorn[standard] requests eth-utils eth-hash[pycryptodome]
+RUN pip3 install pipenv gunicorn uvicorn[standard] requests eth-utils eth-hash[pycryptodome] curlify
 
 # copy project
 COPY . /usr/src 
