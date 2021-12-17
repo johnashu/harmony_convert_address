@@ -71,6 +71,8 @@ Example responses:
     },
 ]
 
+```
+
 > Errors
 
 ``` json
