@@ -49,6 +49,6 @@ if __name__ == "__main__":
 
     # manual check tests. - uncomment to run.
 
-    test_happy_flow()
-    test_error_responses()
-    test_wrong_address()
+    # test_happy_flow()
+    # test_error_responses()
+    # test_wrong_address()
