@@ -9,6 +9,25 @@ On an OS with Docker installed.
 
 `docker-compose up`
 
+# Build Request
+
+```
+url = "http://127.0.0.1:5000"
+
+one_addresses = [
+    "one1cwsf0lrq0hzphqa79q8pwrn6pnzzhwej4tqen3",
+    "one1prz9j6c406h6uhkyurlx9yq9h2e2zrpasr2saf",
+    "one1ltlmxwujfsens80wxh2y2qfaxgqzf9tjex3fc2",
+    "somewrongaddress",
+]
+
+params = {"addresses": one_addresses}
+
+res = requests.post(url, params=params)
+print(f'{res.json()}\n')
+
+```
+
 # Curl Example
 
 Curl requests can be displayed by running `test_api.py`
