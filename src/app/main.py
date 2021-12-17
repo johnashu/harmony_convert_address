@@ -5,12 +5,7 @@ import logging as log
 from core.convert import convert_one_to_hex
 
 
-async def app(scope, receive, send):
-    assert scope["type"] == "http"
-
-    params = dict(urllib.parse.parse_qs(scope["query_string"].decode()))
-    addresses = params["address"]
-
+async def process_addresses(addresses: list) -> list:
     body = []
     for one_address in addresses:
         res, eth_address = await convert_one_to_hex(one_address)
@@ -31,18 +26,49 @@ async def app(scope, receive, send):
             }
         )
 
-    body = json.dumps(body).encode("utf-8")
+    return json.dumps(body).encode("utf-8")
 
+
+async def send_400(send, msg):
     await send(
         {
             "type": "http.response.start",
-            "status": 200,
+            "status": 400,
             "headers": [
                 [b"content-type", b"text/plain"],
             ],
         }
     )
+    body = {"error": msg}
+    body = json.dumps(body).encode("utf-8")
     await send({"type": "http.response.body", "body": body})
+
+
+async def app(scope, receive, send):
+    assert scope["type"] == "http"
+    q = scope["query_string"]
+    # log.info(q)
+    if not q:
+        empty_msg = "Empty Request"
+        await send_400(send, empty_msg)
+    else:
+        params = dict(urllib.parse.parse_qs(q.decode()))
+        addresses = params.get("addresses")
+        if not addresses:
+            bad_request_msg = 'Incorrect request, please supply parameter "addresses" with an array of addresses to convert'
+            await send_400(send, bad_request_msg)
+        else:
+            body = await process_addresses(addresses)
+            await send(
+                {
+                    "type": "http.response.start",
+                    "status": 200,
+                    "headers": [
+                        [b"content-type", b"text/plain"],
+                    ],
+                }
+            )
+            await send({"type": "http.response.body", "body": body})
 
 
 if __name__ == "__main__":

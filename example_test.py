@@ -9,7 +9,7 @@ one_addresses = [
     "one1ltlmxwujfsens80wxh2y2qfaxgqzf9tjex3fc2",
     "somewrongaddress",
 ]
-params = {"address": one_addresses}
+params = {"addresses": one_addresses}
 res = requests.post(url, params=params).json()
 print(res)
 
