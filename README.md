@@ -11,9 +11,15 @@ On an OS with Docker installed.
 
 # Build Request
 
+Example with Python
+
 ```python
+import requests
+
+# define URL
 url = "http://127.0.0.1:5000"
 
+# create list with addresses to convert
 one_addresses = [
     "one1cwsf0lrq0hzphqa79q8pwrn6pnzzhwej4tqen3",
     "one1prz9j6c406h6uhkyurlx9yq9h2e2zrpasr2saf",
@@ -21,10 +27,12 @@ one_addresses = [
     "somewrongaddress",
 ]
 
+# build params using 'addresses' key
 params = {"addresses": one_addresses}
 
-res = requests.post(url, params=params)
-print(f'{res.json()}\n')
+# send request
+response = requests.post(url, params=params)
+print(f'{response.json()}\n')
 
 ```
 
