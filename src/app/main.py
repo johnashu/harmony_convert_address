@@ -4,22 +4,34 @@ import logging as log
 
 from core.convert import convert_one_to_hex
 
+
 async def app(scope, receive, send):
     assert scope["type"] == "http"
 
     params = dict(urllib.parse.parse_qs(scope["query_string"].decode()))
-    one_address = params["address"][0]
-    eth_address = await convert_one_to_hex(one_address)
+    addresses = params["address"]
 
-    msg = f"ONE Address {one_address} converted to {eth_address}"
-    body = json.dumps(
-        {
-            "status": "success",
-            "message": msg,
-            "one_address": one_address,
-            "eth_address": eth_address,
-        }
-    ).encode("utf-8")
+    body = []
+    for one_address in addresses:
+        res, eth_address = await convert_one_to_hex(one_address)
+        status = "success"
+        no_yes = f"Successfully converted to {eth_address}"
+        if not res:
+            status = "error"
+            no_yes = f"was NOT converted, ERROR: {eth_address}"
+
+        msg = f"ONE Address {one_address} {no_yes}"
+
+        body.append(
+            {
+                "status": status,
+                "message": msg,
+                "one_address": one_address,
+                "eth_address": eth_address if res else "error converting",
+            }
+        )
+
+    body = json.dumps(body).encode("utf-8")
 
     await send(
         {
@@ -31,6 +43,7 @@ async def app(scope, receive, send):
         }
     )
     await send({"type": "http.response.body", "body": body})
+
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="127.0.0.1", port=5000, log_level="info", reload=True)
