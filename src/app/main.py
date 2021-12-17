@@ -39,7 +39,7 @@ async def send_400(send, msg):
             ],
         }
     )
-    body = {"error": msg}
+    body = [{"error": msg}]
     body = json.dumps(body).encode("utf-8")
     await send({"type": "http.response.body", "body": body})
 
@@ -55,7 +55,7 @@ async def app(scope, receive, send):
         params = dict(urllib.parse.parse_qs(q.decode()))
         addresses = params.get("addresses")
         if not addresses:
-            bad_request_msg = 'Incorrect request, please supply parameter "addresses" with an array of addresses to convert'
+            bad_request_msg = "Incorrect request, please supply parameter `addresses`  with an array of addresses to convert"
             await send_400(send, bad_request_msg)
         else:
             body = await process_addresses(addresses)
