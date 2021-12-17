@@ -17,41 +17,46 @@ wrong_address = {"addresses": ["somewrongaddress"]}
 wrong_key = {"wrong_key": ""}
 empty_request = {"addresses": []}
 
+headers = None
 
-def make_request(params: dict) -> list:
-    res = requests.post(url, params=params)
+
+def make_request(params: dict, url: str = url, headers: list = None) -> list:
+    res = requests.post(url, params=params, headers=headers)
     print(f"{res.json()}\n")
     print(f"{curlify.to_curl(res.request)}\n")
     return res.json()
 
 
-def base(params: list, expected: str, status: str = None) -> None:
+def base(params: list, expected: str, status: str = None, **kw) -> None:
     for p in params:
-        r = make_request(p)
+        r = make_request(p, **kw)
         assert r[0].get(expected)
         if status:
             assert r[0].get(expected) == status
 
 
-def test_happy_flow():
-    base((happy_flow,), "status")
+def test_happy_flow(**kw) -> None:
+    base((happy_flow,), "status", **kw)
 
 
-def test_wrong_address():
-    base((wrong_address,), "status", status="error")
+def test_wrong_address(**kw) -> None:
+    base((wrong_address,), "status", status="error", **kw)
 
 
-def test_error_responses():
-    base((wrong_key, empty_request), "error")
+def test_error_responses(**kw) -> None:
+    base((wrong_key, empty_request), "error", **kw)
 
 
 if __name__ == "__main__":
+
+    kw = dict(url=url, headers=headers)
+
     # test request
     params = {"addresses": "SomeAddress"}
-    make_request(params)
+    make_request(params, **kw)
 
     # manual check tests. - uncomment to run.
 
-    test_happy_flow()
-    test_error_responses()
-    test_wrong_address()
+    # test_happy_flow(**kw)
+    # test_error_responses(**kw)
+    # test_wrong_address(**kw)
