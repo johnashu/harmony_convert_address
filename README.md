@@ -46,6 +46,8 @@ Curl requests can be displayed by running `test_api.py`
 
 To convert CURL requests to example code use https://reqbin.com/req/c-w7oitglz/convert-curl-to-http-request and use the Generate Code option.
 
+Alternatively use https://curlconverter.com/
+
 ```curl
 curl -X POST -H 'Accept: */*' -H 'Accept-Encoding: gzip, deflate' -H 'Connection: keep-alive' -H 'Content-Length: 0' -H 'User-Agent: python-requests/2.24.0' 'http://127.0.0.1:5000/?addresses=one1cwsf0lrq0hzphqa79q8pwrn6pnzzhwej4tqen3&addresses=one1prz9j6c406h6uhkyurlx9yq9h2e2zrpasr2saf&addresses=one1ltlmxwujfsens80wxh2y2qfaxgqzf9tjex3fc2&addresses=somewrongaddress'
 ```
