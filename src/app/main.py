@@ -5,9 +5,6 @@ import logging
 from core.convert import convert_one_to_hex
 from includes.messages import *
 
-print(http_response_body, http_response_start)
-
-
 async def process_addresses(addresses: list) -> list:
     body = []
     for one_address in addresses:
@@ -35,7 +32,6 @@ async def send_response(send, body: list, status: int = 200):
 async def app(scope, receive, send):
     assert scope["type"] == "http"
     q = scope["query_string"]
-    # log.info(scope)
     if not q:
         body = [{"error": empty_msg}]
         await send_response(send, body, status=400)
