@@ -1,10 +1,8 @@
 import requests
-
 import curlify
 
 # Simple test script - execute when the app is running
 url = "http://127.0.0.1:5000"
-# url = "http://134.209.89.7:8000"
 
 one_addresses = [
     "one1cwsf0lrq0hzphqa79q8pwrn6pnzzhwej4tqen3",
