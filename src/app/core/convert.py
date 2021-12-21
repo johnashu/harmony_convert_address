@@ -29,10 +29,10 @@ async def convert_one_to_hex(addr: str) -> str:
     """
     try:
         if not await is_valid_address(addr):
-            return False, to_checksum_address(addr)
+            return "error", to_checksum_address(addr)
         hrp, data = bech32_decode(addr)
         buf = convertbits(data, 5, 8, False)
         address = "0x" + "".join("{:02x}".format(x) for x in buf)
-        return True, to_checksum_address(address)
+        return "success", to_checksum_address(address)
     except ValueError as e:
-        return False, str(e)
+        return "error", str(e)

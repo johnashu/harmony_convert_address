@@ -1,47 +1,35 @@
 import uvicorn
 import urllib.parse, json
-import logging as log
+import logging
 
 from core.convert import convert_one_to_hex
+from includes.messages import *
+
+print(http_response_body, http_response_start)
 
 
 async def process_addresses(addresses: list) -> list:
     body = []
     for one_address in addresses:
-        res, eth_address = await convert_one_to_hex(one_address)
-        status = "success"
-        no_yes = f"Successfully converted to {eth_address}"
-        if not res:
-            status = "error"
-            no_yes = f"was NOT converted, ERROR: {eth_address}"
+        status, eth_address = await convert_one_to_hex(one_address)
 
-        msg = f"ONE Address {one_address} {no_yes}"
-
+        msg = f"ONE Address {one_address} {res_status[status].format(eth_address)}"
         body.append(
             {
                 "status": status,
                 "message": msg,
                 "one_address": one_address,
-                "eth_address": eth_address if res else "error converting",
+                "eth_address": eth_address if status != "error" else "error converting",
             }
         )
 
-    return json.dumps(body).encode("utf-8")
+    return body
 
 
-async def send_400(send, msg):
-    await send(
-        {
-            "type": "http.response.start",
-            "status": 400,
-            "headers": [
-                [b"content-type", b"text/plain"],
-            ],
-        }
-    )
-    body = [{"error": msg}]
+async def send_response(send, body: list, status: int = 200):
+    await send(dict(http_response_start, **{"status": status}))
     body = json.dumps(body).encode("utf-8")
-    await send({"type": "http.response.body", "body": body})
+    await send(dict(http_response_body, **{"body": body}))
 
 
 async def app(scope, receive, send):
@@ -49,26 +37,17 @@ async def app(scope, receive, send):
     q = scope["query_string"]
     # log.info(scope)
     if not q:
-        empty_msg = "Empty Request"
-        await send_400(send, empty_msg)
+        body = [{"error": empty_msg}]
+        await send_response(send, body, status=400)
     else:
         params = dict(urllib.parse.parse_qs(q.decode()))
         addresses = params.get("addresses")
         if not addresses:
-            bad_request_msg = "Incorrect request, please supply parameter `addresses`  with an array of addresses to convert"
-            await send_400(send, bad_request_msg)
+            body = [{"error": bad_request_msg}]
+            await send_response(send, body, status=400)
         else:
             body = await process_addresses(addresses)
-            await send(
-                {
-                    "type": "http.response.start",
-                    "status": 200,
-                    "headers": [
-                        [b"content-type", b"text/plain"],
-                    ],
-                }
-            )
-            await send({"type": "http.response.body", "body": body})
+            await send_response(send, body)
 
 
 if __name__ == "__main__":

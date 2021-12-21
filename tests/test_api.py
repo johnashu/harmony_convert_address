@@ -4,6 +4,7 @@ import curlify
 
 # Simple test script - execute when the app is running
 url = "http://127.0.0.1:5000"
+# url = "http://134.209.89.7:8000"
 
 one_addresses = [
     "one1cwsf0lrq0hzphqa79q8pwrn6pnzzhwej4tqen3",
@@ -57,6 +58,6 @@ if __name__ == "__main__":
 
     # manual check tests. - uncomment to run.
 
-    # test_happy_flow(**kw)
-    # test_error_responses(**kw)
-    # test_wrong_address(**kw)
+    test_happy_flow(**kw)
+    test_error_responses(**kw)
+    test_wrong_address(**kw)
