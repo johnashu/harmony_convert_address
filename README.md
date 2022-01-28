@@ -1,4 +1,4 @@
-# ONE Address -> ETH Address
+# ONE Address <> ETH Address
 
 Asynchronous Base Service to convert ONE Addresses to ETH format and from ETH Addresses to ONE Format (Bech32)
 
