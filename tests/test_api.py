@@ -3,6 +3,21 @@ import curlify
 import logging
 
 logging.basicConfig(level=logging.INFO, format="[%(levelname)s]: %(message)s")
+def create_mismatch_address(l: list) -> list:
+    """Replace Last Letter of the addresses to create a mismatch
+
+    Args:
+        l (list): list of addresses to change
+
+    Returns:
+        list: list of changed addresses
+    """
+    rtn = []
+    for x in l:
+        x = x[:-1] + "a"
+        rtn.append(x)
+    return rtn
+
 # Simple test script - execute when the app is running
 url = "http://127.0.0.1:5000"
 
@@ -28,6 +43,12 @@ empty_request = {"addresses": [], "from_address": "one"}
 headers = None
 
 
+eth_mm = create_mismatch_address(eth_addresses)
+one_mm = create_mismatch_address(one_addresses)
+mismatch_one = {"addresses": one_mm, "from_address": "one"}
+mismatch_eth = {"addresses": eth_mm, "from_address": "eth"}
+
+
 def make_request(params: dict, url: str = url, headers: list = None) -> list:
     res = requests.post(url, params=params, headers=headers)
     # logging.info Response
@@ -37,7 +58,9 @@ def make_request(params: dict, url: str = url, headers: list = None) -> list:
     return res.json()
 
 
-def base(params: tuple, expected: str, status: str = None, **kw) -> None:
+def base(
+    params: tuple, expected: str, status: str = None, mismatch: bool = False, **kw
+) -> None:
     for p in params:
         r = make_request(p, **kw)
         exp_res = r[0].get(expected)
@@ -52,11 +75,19 @@ def base(params: tuple, expected: str, status: str = None, **kw) -> None:
                 assert (
                     eth_addresses[idx] == x["eth_address"]
                 ), f"Expected: {eth_addresses[idx]} | Got: {x['eth_address']}"
+            elif mismatch:
+                assert one_addresses[idx] != x["one_address"]
+                assert eth_addresses[idx] != x["eth_address"]
 
 
 def test_happy_flow(**kw) -> None:
     base((happy_flow,), "status", status="success", **kw)
     base((happy_flow_eth,), "status", status="success", **kw)
+
+
+def test_address_mismatch(**kw) -> None:
+    base((mismatch_one,), "status", status="error", mismatch=True, **kw)
+    base((mismatch_eth,), "status", status="error", mismatch=True, **kw)
 
 
 def test_wrong_address(**kw) -> None:
@@ -72,11 +103,12 @@ def test_error_responses(**kw) -> None:
 if __name__ == "__main__":
     kw = dict(url=url, headers=headers)
 
-    # test request
+    # # test request
     params = {"addresses": "SomeAddress", "from_address": "one"}
     make_request(params, **kw)
 
-    # manual check tests. - uncomment to run.
-    test_happy_flow(**kw)
-    test_error_responses(**kw)
-    test_wrong_address(**kw)
+    # # manual check tests. - uncomment to run.
+    # test_happy_flow(**kw)
+    # test_address_mismatch(**kw)
+    # test_error_responses(**kw)
+    # test_wrong_address(**kw)
