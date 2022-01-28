@@ -1,6 +1,8 @@
 # ONE Address -> ETH Address
 
-Base Service to convert One Addresses to ETH format and serve results via API POST request.
+Asynchronous Base Service to convert ONE Addresses to ETH format and from ETH Addresses to ONE Format (Bech32)
+
+Serves results via API POST request.
 # Run with Docker
 
 On an OS with Docker installed.
@@ -23,7 +25,7 @@ import requests
 # define URL
 url = "http://127.0.0.1:5000"
 
-# create list with addresses to convert
+# create list with addresses to convert - ONE / ETH
 one_addresses = [
     "one1cwsf0lrq0hzphqa79q8pwrn6pnzzhwej4tqen3",
     "one1prz9j6c406h6uhkyurlx9yq9h2e2zrpasr2saf",
@@ -31,23 +33,35 @@ one_addresses = [
     "somewrongaddress",
 ]
 
-# build params using 'addresses' key
-params = {"addresses": one_addresses}
+# build params using "addresses" key
+params = {
+    "addresses": one_addresses, 
+    "from_address": "one"
+    }
 
 # send request
 response = requests.post(url, params=params)
-print(f'{response.json()}\n')
+print(f"{response.json()}\n")
 
 ```
 
 # Curl Example
 
-Curl requests can be displayed by running `test_api.py`
+Curl requests can be displayed by running `python3 test_api.py`
 
-To convert CURL requests to example code use https://curlconverter.com/
+To add specific headers update `headers = None` in `test_api.py` to a dictionary of headers.
+
+Look for the following in the logs output or check the `api_tests.log`
+
+```
+[INFO]: cURL Request:
+curl -X POST -H "Accept: */*" -H "Accept-Encoding: gzip, deflate" -H "Connection: keep-alive" -H "Content-Length: 0" -H "User-Agent: python-requests/2.26.0" "http://127.0.0.1:5000/?addresses=one137ur0lcdd067he326kkp7g477d0epfkw9lplh6&addresses=one1prz9j6c406h6uhkyurlx9yq9h2e2zrpasr2saf
+```
+
+To convert CURL requests to example code for languages other than python - use https://curlconverter.com/
 
 ```curl
-curl -X POST -H 'Accept: */*' -H 'Accept-Encoding: gzip, deflate' -H 'Connection: keep-alive' -H 'Content-Length: 0' -H 'User-Agent: python-requests/2.24.0' 'http://127.0.0.1:5000/?addresses=one1cwsf0lrq0hzphqa79q8pwrn6pnzzhwej4tqen3&addresses=one1prz9j6c406h6uhkyurlx9yq9h2e2zrpasr2saf&addresses=one1ltlmxwujfsens80wxh2y2qfaxgqzf9tjex3fc2&addresses=somewrongaddress'
+curl -X POST -H "Accept: */*" -H "Accept-Encoding: gzip, deflate" -H "Connection: keep-alive" -H "Content-Length: 0" -H "User-Agent: python-requests/2.24.0" "http://127.0.0.1:5000/?addresses=one1cwsf0lrq0hzphqa79q8pwrn6pnzzhwej4tqen3&addresses=one1prz9j6c406h6uhkyurlx9yq9h2e2zrpasr2saf&addresses=one1ltlmxwujfsens80wxh2y2qfaxgqzf9tjex3fc2&addresses=somewrongaddress"
 ```
 
 # Test Program
@@ -88,29 +102,21 @@ tests\test_api.py ...                                                           
 [
     {
         "status": "success",
-        "message": "ONE Address one1cwsf0lrq0hzphqa79q8pwrn6pnzzhwej4tqen3 Successfully converted to 0xc3a097Fc607Dc41b83bE280E170e7A0cc42bBb32",
-        "one_address": "one1cwsf0lrq0hzphqa79q8pwrn6pnzzhwej4tqen3",
-        "eth_address": "0xc3a097Fc607Dc41b83bE280E170e7A0cc42bBb32",
+        "message": "ETH Address [ 0x8fb837ff0d6bf5ebE62aD5aC1f22BEF35F90a6ce ]  Successfully converted to ONE Address [ one137ur0lcdd067he326kkp7g477d0epfkw9lplh6 ]",
+        "eth_address": "0x8fb837ff0d6bf5ebE62aD5aC1f22BEF35F90a6ce",
+        "one_address": "one137ur0lcdd067he326kkp7g477d0epfkw9lplh6"
     },
     {
         "status": "success",
-        "message": "ONE Address one1prz9j6c406h6uhkyurlx9yq9h2e2zrpasr2saf Successfully converted to 0x08c4596B157EafAE5EC4E0fE629005Bab2a10C3D",
-        "one_address": "one1prz9j6c406h6uhkyurlx9yq9h2e2zrpasr2saf",
+        "message": "ETH Address [ 0x08c4596B157EafAE5EC4E0fE629005Bab2a10C3D ]  Successfully converted to ONE Address [ one1prz9j6c406h6uhkyurlx9yq9h2e2zrpasr2saf ]",
         "eth_address": "0x08c4596B157EafAE5EC4E0fE629005Bab2a10C3D",
-    },
-    {
-        "status": "success",
-        "message": "ONE Address one1ltlmxwujfsens80wxh2y2qfaxgqzf9tjex3fc2 Successfully converted to 0xfAFfb33B924C33381dee35D445013D3200249572",
-        "one_address": "one1ltlmxwujfsens80wxh2y2qfaxgqzf9tjex3fc2",
-        "eth_address": "0xfAFfb33B924C33381dee35D445013D3200249572",
+        "one_address": "one1prz9j6c406h6uhkyurlx9yq9h2e2zrpasr2saf"
     },
     {
         "status": "error",
-        "message": "ONE Address somewrongaddress was NOT converted, ERROR: when sending a str, it must be a hex string. Got: 'somewrongaddress'",
-        "one_address": "somewrongaddress",
-        "eth_address": "error converting",
-    },
-]
+        "message": "ETH Address [ somewrongaddress ]  was NOT converted, ERROR: ONE", 
+        "eth_address": "somewrongaddress", 
+        "one_address": "error converting"}]
 
 ```
 
@@ -133,7 +139,7 @@ tests\test_api.py ...                                                           
 [
     {
         "status": "error",
-        "message": "ONE Address somewrongaddress was NOT converted, ERROR: when sending a str, it must be a hex string. Got: 'somewrongaddress'",
+        "message": "ONE Address somewrongaddress was NOT converted, ERROR: when sending a str, it must be a hex string. Got: 'somewrongaddress' ",
         "one_address": "somewrongaddress",
         "eth_address": "error converting",
     }

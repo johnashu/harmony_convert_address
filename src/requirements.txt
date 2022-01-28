@@ -4,3 +4,4 @@ requests
 eth-hash[pycryptodome]
 pipenv
 curlify
+Crypto
