@@ -44,14 +44,14 @@ def base(params: tuple, expected: str, status: str = None, **kw) -> None:
         assert exp_res, f"Expected: {exp_res} | Got: {status}"
         if status:
             assert exp_res == status, f"Expected: {exp_res} | Got: {status}"
-        for x in r:
+        for idx, x in enumerate(r):
             if x.get("status") == "success":
-                eth = x["eth_address"]
-                idx = eth_addresses.index(eth)
-                logging.info(eth)
                 assert (
                     one_addresses[idx] == x["one_address"]
                 ), f"Expected: {one_addresses[idx]} | Got: {x['one_address']}"
+                assert (
+                    eth_addresses[idx] == x["eth_address"]
+                ), f"Expected: {eth_addresses[idx]} | Got: {x['eth_address']}"
 
 
 def test_happy_flow(**kw) -> None:
