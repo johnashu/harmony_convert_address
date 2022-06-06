@@ -147,5 +147,6 @@ tests\test_api.py ...                                                           
 
 ```
 
-Donations appreciated: one1ztanvstju4e6g7dq5pwg03d65eqy38e4ejwmaf
+Donations appreciated: one1xlu2vumced5sm5qtmxx27sekec8hcdc3maffaz
+
 
